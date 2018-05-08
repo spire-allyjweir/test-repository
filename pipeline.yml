@@ -1,0 +1,65 @@
+jobs:
+  - name: test
+    plan:
+    - get: old-resource
+      trigger: true
+      version: every
+      params: { fetch_merge: true }
+    - get: new-resouce
+      trigger: true
+      version: every
+    - put: new-resouce
+      params:
+        path: new-resouce
+        context: build
+        status: pending
+    - task: placeholder
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source: {repository: alpine/git, tag: "latest"}
+        inputs:
+          - name: new-resouce
+          - name: old-resource
+        run:
+          path: /bin/sh
+          args:
+            - -xce
+            - |
+              echo "NEW RESOURCE:"
+              cat new-resource/README.md
+              echo ""
+              echo "OLD RESOURCE:"
+              cat old-resource/README.md
+    - put: new-resouce
+      params:
+        path: new-resouce
+        context: build
+        status: success
+
+resource_types:
+  - name: new-pull-request
+    type: docker-image
+    source:
+      repository: itsdalmo/github-pr-resource
+  - name: old-pull-request
+    type: docker-image
+    source:
+      repository: jtarchie/pr
+
+resources:
+  - name: old-resource
+    type: old-pull-request
+    source:
+      repo: itsdalmo/test-repository
+      uri: git@github.com:itsdalmo/test-repository.git
+      access_token: ((github-access-token))
+      private_key: ((divx-concourse-tasks-deploy-key))
+
+  - name: new-resouce
+    type: new-pull-request
+    source:
+      repository: itsdalmo/test-repository
+      context: concourse-ci/status
+      access_token: ((github-access-token))
