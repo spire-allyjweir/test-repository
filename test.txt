@@ -1,1 +1,2 @@
 - This is the first comment on the master branch.
+- This comment was added to master branch AFTER the first pull request was made.
