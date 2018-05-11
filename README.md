@@ -5,3 +5,5 @@ Add some text to trigger a new version and verify that Concourse is reusing the 
 can produce surprising results - i.e., we can't rebuild a commit to see whether changes to master will fix a failing build.
 
 Add new text.
+
+Add more new text.
