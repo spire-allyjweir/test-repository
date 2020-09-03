@@ -1,2 +1,4 @@
 - This is the first comment on the master branch.
 - This comment was added to master branch AFTER the first pull request was made.
+- This comment was made from the second pull request (which is up to date with the very latest master).
+- Add another comment from the 2nd pull request (to make it the latest version).
